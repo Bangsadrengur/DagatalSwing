@@ -12,7 +12,7 @@ public class Vidmot
     JCalendar cal;
     String date;
     boolean loaded;
-    //Logik logik;
+    Logik logik;
 
     public Vidmot()
     {
@@ -20,9 +20,9 @@ public class Vidmot
         frame = new JFrame("SimpleCalendar");
         textBox = new JTextArea();
         cal = new JCalendar();
-        // initialize date
         loaded = false;
-        // initialize logik
+        logik = new Logik();
+        date = logik.dateToString(cal.getDate());
 
         // Set events.
         frame.addWindowListener(new closeEvent());
@@ -47,15 +47,26 @@ public class Vidmot
 
     private void changeDay()
     {
-        // Interact with logik.
+        if(!loaded)
+        {
+            logik.loadDays();
+            textBox.setText(logik.getDateText(date));
+            loaded = true;
+        }
+        logik.setDateText(date, textBox.getText());
+        date = logik.dateToString(cal.getDate());
+        textBox.setText(logik.getDateText(date));
     }
 
     private class closeEvent extends WindowAdapter
     {
-        public void windowClosing(WindowEvent e)
+        public void windowClosing(WindowEvent evt)
         {
-                // Interact with logik.
-                System.exit(0);
+            try
+            {
+                logik.saveDays();
+            } catch(Exception e) {}
+            System.exit(0);
         }
     }
 
