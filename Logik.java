@@ -6,15 +6,23 @@ import java.io.*;
 
 public class Logik
 {
+    // Data decleration:
+    // days is a table mapping between dates and text.
+    // path points to folder containted in 
+    // environment variable USERPROFILE. For linux
+    // you need to set this variable.
     Value days;
     String path;
 
+    // Initialize variables.
     public Logik()
     {
         days = null;
         path = System.getenv("USERPROFILE")+"\\Diary.dat";
     }
 
+    // Loads Value table from file at path if it exists,
+    // else it returns a new Value table.
     public void loadDays()
     {
         try
@@ -25,12 +33,16 @@ public class Logik
         }
     }
 
+    // Saves Value table to file at path.
     public void saveDays()
         throws FileNotFoundException, IOException
     {
         Value.saveFile(days, path);
     }
 
+    // Get text that date points to in Value table
+    // days. If date points to a null value an empty
+    // string is returned.
     public String getDateText(String date)
     {
         Value res = days.get(Value.makeString(date));
@@ -38,6 +50,12 @@ public class Logik
         return res.asString();
     }
 
+    // Update Value table at date with text.
+    // Does nothing if the input is the same as 
+    // earlier input in days.
+    // Sets value to null if input is an empty string.
+    // Returns a bool value corresponding to if the
+    // value was changed in days or not.
     public boolean setDateText(String date, String text)
     {
         String oldText = getDateText(date);
